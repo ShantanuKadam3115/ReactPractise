@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 
 import './App.css'
 
@@ -9,14 +9,14 @@ function App() {
   const [isCharAllowed, setIsCharAllowed] = useState(false)
   const [password , setPassoword] = useState("")
 
-  //useCallback 
+  useEffect(()=>{
+    passwordGenerator()
+  }, [length, isCharAllowed, isNumAllowed, passwordGenerator])
 
-  const Password = () => {
-    let passLength = 8
+  const passwordGenerator = useCallback( () => {
+    let passLength = length
     let pass = ""
     let str = ""
-    const addNumbers = true
-    const addCharacters = true
     const alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     const numbers = "0123456789"
     const characters = "!@#$%^&*~<>+"
@@ -26,28 +26,26 @@ function App() {
           throw new Error("Index out of bounds");
       }
       return str.slice(0, index) + replacement + str.slice(index + 1);
-  }
+    }
      
     for (let i = 0; i < passLength; i++) {
       let num = Math.floor(Math.random() * alphabets.length )
       str += alphabets[num]  
     }
 
-    if (addNumbers == false && addCharacters == false) {
+    if (isNumAllowed == false && isCharAllowed == false) {
       pass = str
-    }else if (addNumbers == true && addCharacters == false) {
+    }else if (isNumAllowed == true && isCharAllowed == false) {
       for (let i = 0; i < passLength/2 ; i++) {
         let temp = Math.floor(Math.random() * passLength)
         let num = Math.floor(Math.random() * numbers.length)
-        // console.log(str, temp,  numbers[num])
         str = replaceCharAt(str, temp, numbers[num])
       }
       pass = str
-    }else if(addNumbers == false && addCharacters == true){
+    }else if(isNumAllowed == false && isCharAllowed == true){
       for (let i = 0; i < passLength/2 ; i++) {
         let temp = Math.floor(Math.random() * passLength)
         let num = Math.floor(Math.random() * characters.length)
-        // console.log(str, temp,  characters[num])
         str = replaceCharAt(str, temp, characters[num])
       }
       pass = str
@@ -55,29 +53,72 @@ function App() {
       for (let i = 0; i < passLength/4 ; i++) {
         let temp = Math.floor(Math.random() * passLength)
         let num = Math.floor(Math.random() * numbers.length)
-        // console.log(str, temp,  numbers[num])
         str = replaceCharAt(str, temp, numbers[num])
       }
       for (let i = 0; i < passLength/4 ; i++) {
         let temp = Math.floor(Math.random() * passLength)
         let num = Math.floor(Math.random() * characters.length)
-        // console.log(str, temp,  characters[num])
         str = replaceCharAt(str, temp, characters[num])
       }
       pass = str
     }
-    
-    // console.log(str)
-    console.log(pass)
-  }
+     setPassoword(pass)
+  } , [length , isNumAllowed , isCharAllowed, setPassoword])
+
+ 
   
 
   return (
     <>  
-    <h1 className="text-3xl font-bold text-center">
-      Password Generator 
-    </h1>
-    <Password/>
+    <div className='w-full max-w-md mx-auto shadow-md rounded-lg my-8 px-4 py-2 text-red-500 bg-gray-800'>
+      <h1 className='text-center text-white my-2'>Password Generator</h1>
+      <div className='flex shadow rounded-lg overflow-hidden mb-4'>
+        <input 
+        type="text" 
+        value={password}
+        placeholder='password'
+        className='outline-none w-full py-1 px-3'
+        readOnly
+        />
+        <button className='outline-none bg-amber-600 text-black px-2 shrink-0'>
+          Copy
+        </button>
+      </div>
+      <div className='flex text-sm gap-x-2'>
+        <div className='flex items-center gap-x-1'>
+          <input
+          id='lengthButton'
+          type="range"
+          min={8}
+          max={16}
+          value={length}
+          className='cursor-pointer' 
+          onChange={(e)=>{setLength(e.target.value)}}
+          />
+          <label htmlFor="lengthButton">Length: {length}</label>
+        </div>
+        <div className='fles items-center gap-x-2'>
+          <input 
+          type="checkbox"  
+          id="numbersButton"
+          className='cursor-pointer'
+          value={isNumAllowed}
+          onChange={() => setIsNumAllowed((prev)=>!prev)} 
+          />
+          <label htmlFor="numbersButton">Numbers</label>
+        </div>
+        <div className='fles items-center gap-x-2'>
+          <input 
+          type="checkbox"  
+          id="charactersButton"
+          className='cursor-pointer'
+          value={isCharAllowed}
+          onChange={ () => setIsCharAllowed((prev)=>!prev)} 
+          />
+          <label htmlFor="charactersButton">Characters</label>
+        </div>
+      </div>
+    </div>
     </>
   )
 }
