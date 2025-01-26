@@ -11,7 +11,7 @@ function App() {
 
   useEffect(()=>{
     passwordGenerator()
-  }, [length, isCharAllowed, isNumAllowed, passwordGenerator])
+  }, [length, isCharAllowed, isNumAllowed])
 
   const passwordGenerator = useCallback( () => {
     let passLength = length
@@ -63,7 +63,7 @@ function App() {
       pass = str
     }
      setPassoword(pass)
-  } , [length , isNumAllowed , isCharAllowed, setPassoword])
+  } , [length , isNumAllowed , isCharAllowed])
 
  
   
