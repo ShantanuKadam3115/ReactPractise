@@ -1,6 +1,6 @@
 
 
-export default function PasswordGenerator  ( length , isNumAllowed, isCharAllowed) {
+export default function Password  ( length , isNumAllowed, isCharAllowed) {
 
     if (length <8 || length > 16) {
         throw new Error("Length of the password is out of bounds")
@@ -54,4 +54,7 @@ export default function PasswordGenerator  ( length , isNumAllowed, isCharAllowe
       pass = str
     }
      return pass
+     
   } 
+
+//   console.log(PasswordGenerator(10, false, false))
