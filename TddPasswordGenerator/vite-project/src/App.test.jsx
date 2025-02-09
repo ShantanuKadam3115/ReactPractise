@@ -44,11 +44,6 @@ import App from './App';
         expect(charButtob).toBeInTheDocument();
     });
 
-    it('should have a password field that is not empty', () => {
-        render(<App />);
-        const pass = screen.getByTestId('password');
-        expect(pass).not.toBeNull();
-    });
 
     it('should have the range input set with a default value of 8', () => {
         render(<App />);
@@ -59,10 +54,16 @@ import App from './App';
 
 describe('password generation', () => {
 
-    test("should generate a password with numbers", async () => {
+    it('should have a password field that is not empty', () => {
         render(<App />);
-        const numbersCheckbox = screen.getByLabelText(/Numbers/i);
-        fireEvent.click(numbersCheckbox);
+        const pass = screen.getByPlaceholderText('password');
+        expect(pass).not.toBeNull();
+    });
+
+    test("for password to contain numbers when Numbers checkbox is checked", async () => {
+        render(<App />);
+        const numCheckbox = screen.getByLabelText(/Numbers/i);
+        fireEvent.click(numCheckbox);
       
         await waitFor(() => {
           const passwordElement = screen.getByTestId("password");
@@ -72,13 +73,16 @@ describe('password generation', () => {
       });
 
     
-    it('should generate a password with characters', async () => {
+    it('should generate a password with characters when checkbox is checked', async () => {
         render(<App />);
         
-        const charactersCheckbox = screen.getByLabelText('Characters');
-        fireEvent.click(charactersCheckbox);
+        const charaCheckbox = screen.getByRole('checkbox',
+            {
+                name : /Characters/i
+            })
+        fireEvent.click(charaCheckbox);
         await waitFor(() => {
-            const passwordElement = screen.getByTestId("password");
+            const passwordElement = screen.getByPlaceholderText("password");
             const password =  passwordElement.value; 
             expect(password).toMatch(/[!@#$%^&*~<>+]/);
           });
@@ -87,10 +91,10 @@ describe('password generation', () => {
     it('should generate a password with numbers and characters', async () => {
         render(<App />);
         
-        const numbersCheckbox = screen.getByLabelText(/Numbers/i);
-        fireEvent.click(numbersCheckbox);
-        const charactersCheckbox = screen.getByLabelText('Characters');
-        fireEvent.click(charactersCheckbox);
+        const numCheckbox = screen.getByLabelText(/Numbers/i);
+        fireEvent.click(numCheckbox);
+        const charCheckbox = screen.getByLabelText('Characters');
+        fireEvent.click(charCheckbox);
         await waitFor(() => {
             const passwordElement = screen.getByTestId("password");
             const password = passwordElement.textContent || passwordElement.value; 
@@ -110,8 +114,23 @@ describe('password generation', () => {
     });
 });
 
+
+
 // describe('copy to clipbaoard functionality', () => {
-    
+//     it('should copy the password when the copy button is clicked',async ()=>{
+//         render(<App/>)
+//         const copyButton = screen.getByRole('button', {
+//             name: /copy/i
+//           })
+//         fireEvent.click(copyButton)
+//         const copiedPass = window.navigator.clipboard.readText()
+//         await waitFor(()=>{
+//             const passwordElement = screen.getByPlaceholderText("password");
+//             const password =  passwordElement.value;
+//             expect(password).toBe(copiedPass) 
+//         })
+
+//     })
 // })
 
     
