@@ -10,5 +10,6 @@ export default defineConfig({
     globals: true, // Enable global variables like `describe`, `test`, and `expect`
     environment: 'jsdom', // Use a browser-like environment for testing
     setupFiles: './src/setupTests.js', // Optional: Global setup file
+    include: ["**/*.test.js"], // The test files to include
   },
 })

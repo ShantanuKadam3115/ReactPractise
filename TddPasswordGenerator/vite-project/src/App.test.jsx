@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { test, expect, describe, it } from 'vitest'; // Import Vitest utilities
+import { test, expect, describe, it } from 'vitest'; 
 import App from './App';
 
  describe('UI render', () => {
